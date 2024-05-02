@@ -9,6 +9,9 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Builder
 @Getter
 public class TaskResponseDTO {
@@ -32,5 +35,20 @@ public class TaskResponseDTO {
                 .assignedTo(task.getAssignedTo())
                 .build();
         return taskResponseDTO;
+    }
+
+    public static List<TaskResponseDTO> toTaskResponseDTOList(List<Task> taskList){
+        return taskList.stream().map(task->
+            TaskResponseDTO
+                    .builder()
+                    .id(task.getId())
+                    .name(task.getName())
+                    .taskStatus(task.getTaskStatus())
+                    .description(task.getDescription())
+                    .start(task.getStart())
+                    .end(task.getEnd())
+                    .assignedTo(task.getAssignedTo())
+                    .build()
+        ).collect(Collectors.toList());
     }
 }

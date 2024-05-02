@@ -4,6 +4,7 @@ import com.razat.todo.enums.TaskStatus;
 import com.razat.todo.exceptions.InvalidTaskException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class Task extends BaseModel{
     @Column(nullable = false)
     private Date end ;
     @ManyToOne
+    @JoinColumn(name="user_id") //this will rename the foreign key in task table to user_id from assigned_to_id
     private User assignedTo;
 
     public static TaskBuilder builder(){
@@ -49,15 +51,9 @@ public class Task extends BaseModel{
 
         private Task task = new Task();
         public Task build(){
-            //perform complex validations.
-            validate(task);
+            //perform validations in service layer instead.
             //deep copy.
             return task.clone();
-        }
-
-        private static void validate(Task task) {
-            if(task.name == null ||  task.start == null || task.end == null)
-                throw new InvalidTaskException("Task can't have name ,start and end date as null!");
         }
 
         public TaskBuilder name(String name){
